@@ -1,0 +1,67 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: finance_db
+    restart: always
+    environment:
+      POSTGRES_USER: finance_user
+      POSTGRES_PASSWORD: finance_secure_password
+      POSTGRES_DB: finance_tracker_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: finance_pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@finance.com
+      PGADMIN_DEFAULT_PASSWORD: adminpassword
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+
+  web:
+    build: .
+    container_name: finance_web
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+    - PYTHONPATH=/code
+    volumes:
+      - ./app:/code/app
+      - ./migration:/code/migration  # Додаємо цей рядок
+      - ./alembic.ini:/code/alembic.ini  # І цей рядок
+      - ./tests:/code/tests
+      - ./pytest.ini:/code/pytest.ini
+    # Замість індивідуальних environment прописуємо шлях до нашого .env файлу
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+# We moved frontend inside the services block and fixed the indentation
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: finance_frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules     # Анонімний волюм: ховає модулі ЛИШЕ всередині Docker
+      - /app/.vite            # Анонімний волюм: ховає кеш Vite ЛИШЕ всередині Docker
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000/api/v1
+    depends_on:
+      - web
+
+# Ось цей блок ми додали, щоб оголосити сховище для бази даних
+volumes:
+  postgres_data:

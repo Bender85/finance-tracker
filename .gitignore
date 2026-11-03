@@ -1,0 +1,30 @@
+# Python / Бекенд сміття та кеш
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.python-version
+.venv/
+venv/
+ENV/
+env/
+
+# Node.js / Фронтенд сміття
+node_modules/
+/app/dist
+.eslintcache
+.stylelintcache
+*.local
+
+# Docker та Локальні Секрети (Важливо!)
+.env
+.env.local
+.env.*.local
+db_data/
+postgres_data/
+
+# Системні файли Mac / OS
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
