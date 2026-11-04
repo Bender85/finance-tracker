@@ -1,7 +1,9 @@
-from uuid import UUID, uuid4
 from datetime import datetime
-from sqlmodel import SQLModel, Field, Relationship
 from decimal import Decimal
+from uuid import UUID, uuid4
+
+from sqlmodel import Field, SQLModel
+
 
 class Account(SQLModel, table=True):
     __tablename__ = "accounts"

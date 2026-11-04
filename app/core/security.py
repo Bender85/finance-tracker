@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta
-from typing import Optional
+
 import bcrypt
 import jwt
+
 from app.core.config import settings
 
 ALGORITHM = "HS256"
@@ -26,7 +27,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     except Exception:
         return False
 
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
     """Генерує JWT access токен"""
     to_encode = data.copy()
     if expires_delta:

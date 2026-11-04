@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated  # noqa: I001
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm

@@ -1,13 +1,13 @@
-from datetime import datetime, date
-from typing import Optional
+from datetime import date, datetime
+
 from fastapi import APIRouter
 from sqlalchemy import func
 from sqlmodel import select
 
-from app.api.deps import SessionDep, CurrentUserDep
+from app.api.deps import CurrentUserDep, SessionDep
+from app.models.budget import CategoryBudget  # Переконайся, що імпортував
 from app.models.transaction import Transaction
 from app.schemas.analytics import AnalyticsResponse, CategoryAggregation
-from app.models.budget import CategoryBudget # Переконайся, що імпортував
 
 router = APIRouter(tags=["Analytics"])
 
@@ -15,8 +15,8 @@ router = APIRouter(tags=["Analytics"])
 async def get_spent_by_categories(
     session: SessionDep,
     current_user: CurrentUserDep,
-    from_date: Optional[date] = None,  # Опціональний фільтр: дата "від"
-    to_date: Optional[date] = None     # Опціональний фільтр: дата "до"
+    from_date: date | None = None,  # Опціональний фільтр: дата "від"
+    to_date: date | None = None     # Опціональний фільтр: дата "до"
 ):
     """
     Повертає аналітику витрат користувача за категоріями за вказаний період.

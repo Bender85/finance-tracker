@@ -1,8 +1,9 @@
-from uuid import UUID, uuid4
 from datetime import datetime
-from sqlmodel import SQLModel, Field
 from decimal import Decimal
-from app.schemas.transaction import TransactionType
+from uuid import UUID, uuid4
+
+from sqlmodel import Field, SQLModel
+
 
 class Transaction(SQLModel, table=True):
     __tablename__ = "transactions"

@@ -1,7 +1,10 @@
+'use client'
+
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAccounts } from '../hooks/useAccounts';
 import { deleteAccount, updateAccount } from '../api/transactions';
+import axiosClient from '../api/axiosClient';
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
   UAH: '₴',
@@ -85,14 +88,17 @@ export default function AccountSection() {
   };
 
   const deleteMutation = useMutation({
-    mutationFn: deleteAccount,
+    mutationFn: async (accountId: string) => {
+      await axiosClient.delete(`/accounts/${accountId}`);
+    },
     onSuccess: () => {
-      // Автоматично оновлюємо список рахунків та транзакцій на екрані
+      // 🌟 ЗАЛІЗОБЕТОННЕ ОЧИЩЕННЯ: Оновлюємо рахунки, аналітику та стрічку транзакцій миттєво!
       queryClient.invalidateQueries({ queryKey: ['accounts'] });
+      queryClient.invalidateQueries({ queryKey: ['analytics'] });
       queryClient.invalidateQueries({ queryKey: ['transactions'] });
     },
     onError: (error: any) => {
-      alert(error.response?.data?.detail || "Помилка при видаленні рахунку");
+      alert("Не вдалося видалити рахунок");
     }
   });
 

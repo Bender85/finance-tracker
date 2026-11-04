@@ -14,5 +14,5 @@ COPY . .
 EXPOSE 3000
 
 # Запускаємо через yarn
-CMD ["yarn", "dev", "--host", "0.0.0.0", "--port", "3000"]
+CMD ["yarn", "dev"]
 

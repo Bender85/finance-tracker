@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr, Field
 
+
 # Схема для даних, які ми очікуємо отримати від користувача при реєстрації
 class UserCreate(BaseModel):
     email: EmailStr

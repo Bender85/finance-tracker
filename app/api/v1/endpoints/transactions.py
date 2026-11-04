@@ -1,15 +1,16 @@
-from pydantic import BaseModel
-from typing import Optional
-from uuid import UUID
 import csv
 import io
+from typing import Optional
+from uuid import UUID
 
-from fastapi import APIRouter, HTTPException, status, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
 from sqlmodel import select
 
 from app.api.deps import CurrentUserDep, SessionDep
 from app.models.account import Account
+from app.models.budget import CategoryBudget  # Імпортуй нову модель
 from app.models.transaction import Transaction
 from app.schemas.transaction import (
     TransactionCreate,
@@ -17,7 +18,7 @@ from app.schemas.transaction import (
     TransactionType,
     TransactionUpdate,
 )
-from app.models.budget import CategoryBudget # Імпортуй нову модель
+
 
 class BudgetCreate(BaseModel):
     category_name: str
@@ -106,8 +107,8 @@ async def create_transaction(
 async def read_transactions(
     session: SessionDep,
     current_user: CurrentUserDep,
-    account_id: Optional[UUID] = Query(None, description="Фільтр за конкретним рахунком"),
-    category_name: Optional[str] = Query(None, description="Фільтр за назвою категорії")
+    account_id: UUID | None = Query(None, description="Фільтр за конкретним рахунком"),
+    category_name: str | None = Query(None, description="Фільтр за назвою категорії")
 ):
     """Повертає список транзакцій користувача з опціональною фільтрацією"""
     # Базовий запит: тільки транзакції поточного юзера
@@ -204,8 +205,8 @@ async def delete_transaction(
 async def export_transactions_to_csv(
     session: SessionDep,
     current_user: CurrentUserDep,
-    account_id: Optional[UUID] = Query(None),
-    category_name: Optional[str] = Query(None)
+    account_id: UUID | None = Query(None),
+    category_name: str | None = Query(None)
 ):
     """
     Генерує та віддає CSV-файл із транзакціями користувача 

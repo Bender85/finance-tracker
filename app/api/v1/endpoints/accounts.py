@@ -1,8 +1,7 @@
-from pydantic import BaseModel, Field
-from typing import Optional
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, status
+from pydantic import BaseModel, Field
 from sqlmodel import select
 
 from app.api.deps import CurrentUserDep, SessionDep
@@ -13,8 +12,8 @@ from app.schemas.account import AccountCreate, AccountResponse, AccountTransfer
 router = APIRouter(tags=["Accounts"])
 
 class AccountUpdate(BaseModel):
-    name: Optional[str] = Field(None, max_length=50)
-    balance: Optional[float] = Field(None, ge=0)
+    name: str | None = Field(None, max_length=50)
+    balance: float | None = Field(None, ge=0)
 
 @router.post("/", response_model=AccountResponse, status_code=status.HTTP_201_CREATED)
 async def create_account(

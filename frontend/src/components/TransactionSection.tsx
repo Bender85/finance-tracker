@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react';
 import { useAccounts } from '../hooks/useAccounts';
 import { useTransactions } from '../hooks/useTransactions';

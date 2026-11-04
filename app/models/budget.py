@@ -1,6 +1,7 @@
 from uuid import UUID, uuid4
-from typing import Optional
-from sqlmodel import SQLModel, Field
+
+from sqlmodel import Field, SQLModel
+
 
 class CategoryBudget(SQLModel, table=True):
     __tablename__ = "category_budgets"

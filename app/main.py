@@ -11,11 +11,6 @@ from app.api.v1.endpoints.analytics import router as analytics_router
 from app.api.v1.endpoints.auth import router as auth_router
 from app.api.v1.endpoints.transactions import router as transactions_router
 from app.core.database import engine
-from app.models.account import Account
-from app.models.transaction import Transaction
-
-# Імпортуємо всі моделі, щоб SQLModel ініціалізував їх у БД при старті
-from app.models.user import User
 
 
 @asynccontextmanager
